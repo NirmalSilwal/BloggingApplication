@@ -5,6 +5,7 @@ import com.eaproject.blog.exceptions.ResourceNotFoundException;
 import com.eaproject.blog.payloads.UserDto;
 import com.eaproject.blog.repositories.UserRepo;
 import com.eaproject.blog.services.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -64,13 +68,13 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(Integer userId) {
         User user = this.userRepo
                 .findById(userId)
-                .orElseThrow(()->new ResourceNotFoundException("User", "Id", userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
 
         this.userRepo.delete(user);
     }
 
     // we can do the model mapping for this two methods
-
+    /*
     private User dtoToUser(UserDto userDto) {
         User user = new User();
         user.setId(userDto.getId());
@@ -80,7 +84,6 @@ public class UserServiceImpl implements UserService {
         user.setAbout(userDto.getAbout());
         return user;
     }
-
     private UserDto userToDto(User user) {
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
@@ -88,6 +91,18 @@ public class UserServiceImpl implements UserService {
         userDto.setAbout(user.getAbout());
         userDto.setEmail(user.getEmail());
         userDto.setPassword(user.getPassword());
+        return userDto;
+    }
+     */
+
+    // using model mapper
+    private User dtoToUser(UserDto userDto) {
+        User user = this.modelMapper.map(userDto, User.class);
+        return user;
+    }
+
+    private UserDto userToDto(User user) {
+        UserDto userDto = this.modelMapper.map(user, UserDto.class);
         return userDto;
     }
 }
