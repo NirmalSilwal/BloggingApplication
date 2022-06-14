@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -44,16 +45,30 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteCategory(Integer categoryId) {
+        Category givenCategory = this.categoryRepo
+                .findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "Category Id", categoryId));
 
+        this.categoryRepo.delete(givenCategory);
     }
 
     @Override
     public CategoryDto getCategory(Integer categoryId) {
-        return null;
+        Category cat = this.categoryRepo
+                .findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "Category Id", categoryId));
+
+        return this.modelMapper.map(cat, CategoryDto.class);
     }
 
     @Override
     public List<CategoryDto> getCategories() {
-        return null;
+        List<Category> catlist = this.categoryRepo.findAll();
+
+        List<CategoryDto> categoryDtos = catlist.stream()
+                .map(c -> this.modelMapper.map(c, CategoryDto.class))
+                .collect(Collectors.toList());
+
+        return categoryDtos;
     }
 }
