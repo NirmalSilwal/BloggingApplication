@@ -1,6 +1,7 @@
 package com.eaproject.blog.controllers;
 
 import com.eaproject.blog.entities.Post;
+import com.eaproject.blog.payloads.ApiResponse;
 import com.eaproject.blog.payloads.PostDto;
 import com.eaproject.blog.repositories.PostRepo;
 import com.eaproject.blog.services.CategoryService;
@@ -65,5 +66,20 @@ public class PostController {
     public ResponseEntity<PostDto> getPostById(@PathVariable Integer postId) {
         PostDto postDto = this.postService.getPostById(postId);
         return new ResponseEntity<PostDto>(postDto, HttpStatus.OK);
+    }
+
+    // delete post
+
+    @DeleteMapping("/posts/{postId}")
+    public ApiResponse deletePost(@PathVariable Integer postId) {
+        this.postService.deletePost(postId);
+        return new ApiResponse("deleted post successfully!!", true);
+    }
+
+    // update post
+    @PutMapping("/posts/{postId}")
+    public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable Integer postId) {
+        PostDto givenPost = this.postService.updatePost(postDto, postId);
+        return new ResponseEntity<PostDto>(givenPost, HttpStatus.OK);
     }
 }
