@@ -35,4 +35,7 @@ public class PostController {
 
         return new ResponseEntity<PostDto>(createdNewPost, HttpStatus.CREATED);
     }
+
+
+
 }
