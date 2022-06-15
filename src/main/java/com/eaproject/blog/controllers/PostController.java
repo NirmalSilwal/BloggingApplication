@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/")
@@ -36,6 +37,33 @@ public class PostController {
         return new ResponseEntity<PostDto>(createdNewPost, HttpStatus.CREATED);
     }
 
+    // get posts by user
+    @GetMapping("/user/{userId}/posts")
+    public ResponseEntity<List<PostDto>> getPostsByUser(@PathVariable Integer userId) {
+        List<PostDto> postDtos = this.postService.getPostsByUser(userId);
 
+        return new ResponseEntity<List<PostDto>>(postDtos, HttpStatus.OK);
+    }
 
+    // get posts by category
+    @GetMapping("/category/{catId}/posts")
+    public ResponseEntity<List<PostDto>> getPostsByCategory(@PathVariable Integer catId) {
+        List<PostDto> postDtos = this.postService.getPostsByCategory(catId);
+
+        return new ResponseEntity<List<PostDto>>(postDtos, HttpStatus.OK);
+    }
+
+    // get all posts
+    @GetMapping("/posts")
+    public ResponseEntity<List<PostDto>> getAllPosts() {
+        List<PostDto> allPosts = this.postService.getAllPost();
+        return new ResponseEntity<List<PostDto>>(allPosts, HttpStatus.OK);
+    }
+
+    // get all posts details by id
+    @GetMapping("/posts/{postId}")
+    public ResponseEntity<PostDto> getPostById(@PathVariable Integer postId) {
+        PostDto postDto = this.postService.getPostById(postId);
+        return new ResponseEntity<PostDto>(postDto, HttpStatus.OK);
+    }
 }
