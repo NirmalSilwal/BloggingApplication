@@ -16,7 +16,7 @@ public class CategoryDto {
 
     @NotBlank
     @Size(min = 4, message = "minimum size of category title must be 4 characters")
-    private String categoryTitle ;
+    private String categoryTitle;
 
     @NotBlank
     @Size(min = 10, message = "min size of description must be 10 characters")
