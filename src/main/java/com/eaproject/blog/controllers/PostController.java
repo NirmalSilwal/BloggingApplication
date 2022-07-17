@@ -8,6 +8,8 @@ import com.eaproject.blog.services.CategoryService;
 import com.eaproject.blog.services.PostService;
 import com.eaproject.blog.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,10 +58,14 @@ public class PostController {
 
     // get all posts
     @GetMapping("/posts")
-    public ResponseEntity<List<PostDto>> getAllPosts() {
-        List<PostDto> allPosts = this.postService.getAllPost();
+    public ResponseEntity<List<PostDto>> getAllPosts(
+            @RequestParam(value = "pageNumber", defaultValue = "1", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "3", required = false) Integer pageSize) {
+
+        List<PostDto> allPosts = this.postService.getAllPost(pageNumber, pageSize);
         return new ResponseEntity<List<PostDto>>(allPosts, HttpStatus.OK);
     }
+
 
     // get all posts details by id
     @GetMapping("/posts/{postId}")
