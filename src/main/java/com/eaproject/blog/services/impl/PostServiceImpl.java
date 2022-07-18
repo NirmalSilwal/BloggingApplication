@@ -5,6 +5,7 @@ import com.eaproject.blog.entities.Post;
 import com.eaproject.blog.entities.User;
 import com.eaproject.blog.exceptions.ResourceNotFoundException;
 import com.eaproject.blog.payloads.PostDto;
+import com.eaproject.blog.payloads.PostResponse;
 import com.eaproject.blog.payloads.UserDto;
 import com.eaproject.blog.repositories.CategoryRepo;
 import com.eaproject.blog.repositories.PostRepo;
@@ -85,7 +86,7 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public List<PostDto> getAllPost(Integer pageNumber, Integer pageSize) {
+    public PostResponse getAllPost(Integer pageNumber, Integer pageSize) {
         Pageable pg = PageRequest.of(pageNumber, pageSize);
 
         Page<Post> pagePosts = this.postRepo.findAll(pg);
@@ -94,7 +95,15 @@ public class PostServiceImpl implements PostService {
         List<PostDto> postDtos = allPosts.stream().map(p -> this.modelMapper
                 .map(p, PostDto.class)).collect(Collectors.toList());
 
-        return postDtos;
+        PostResponse postResponse = new PostResponse();
+
+        postResponse.setContent(postDtos);
+        postResponse.setPageNumber(pagePosts.getNumber());
+        postResponse.setPageSize(pagePosts.getSize());
+        postResponse.setTotalElements(pagePosts.getTotalElements());
+        postResponse.setTotalPages(pagePosts.getTotalPages());
+
+        return postResponse;
     }
 
     @Override
