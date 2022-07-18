@@ -2,6 +2,7 @@ package com.eaproject.blog.services;
 
 import com.eaproject.blog.entities.Post;
 import com.eaproject.blog.payloads.PostDto;
+import com.eaproject.blog.payloads.PostResponse;
 
 import java.util.List;
 
@@ -18,7 +19,8 @@ public interface PostService {
 
     // adding Paging here
     // get all posts
-    List<PostDto> getAllPost(Integer pageNumber, Integer pageSize);
+//    List<PostDto> getAllPost(Integer pageNumber, Integer pageSize);
+    PostResponse getAllPost(Integer pageNumber, Integer pageSize);
 
     // get post by id
     PostDto getPostById(Integer postId);
